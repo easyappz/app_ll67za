@@ -1,5 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+// Register global axios interceptors early
+import './api/setupInterceptors.js';
+
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -8,7 +11,6 @@ import { ConfigProvider } from 'antd';
 import ru_RU from 'antd/locale/ru_RU';
 import 'antd/dist/reset.css';
 import { AuthProvider } from './auth/AuthContext.jsx';
-import './api/setupInterceptors';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
