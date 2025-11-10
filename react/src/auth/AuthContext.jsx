@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { message } from 'antd';
 
 const AuthContext = createContext({
@@ -13,8 +13,20 @@ const AuthContext = createContext({
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [accessToken, setAccessToken] = useState(localStorage.getItem('accessToken'));
+
+  // Initialize access with fallback to 'token'
+  const initialAccess = localStorage.getItem('accessToken') || localStorage.getItem('token');
+  const [accessToken, setAccessToken] = useState(initialAccess);
   const [refreshToken, setRefreshToken] = useState(localStorage.getItem('refreshToken'));
+
+  // Optional sync: if only 'token' exists, copy it into 'accessToken'
+  useEffect(() => {
+    const hasAccess = localStorage.getItem('accessToken');
+    const token = localStorage.getItem('token');
+    if (!hasAccess && token) {
+      localStorage.setItem('accessToken', token);
+    }
+  }, []);
 
   const isAuthenticated = Boolean(accessToken);
 
@@ -22,6 +34,7 @@ export const AuthProvider = ({ children }) => {
     // data: { access, refresh, user }
     if (data?.access) {
       localStorage.setItem('accessToken', data.access);
+      localStorage.setItem('token', data.access);
       setAccessToken(data.access);
     }
     if (data?.refresh) {
