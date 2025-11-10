@@ -41,10 +41,10 @@ const Login = () => {
           <Form.Item
             label="Почта"
             name="email"
-            rules=[
+            rules={[
               { required: true, message: 'Укажите почту' },
               { type: 'email', message: 'Некорректный email' }
-            ]
+            ]}
           >
             <Input data-easytag="id5-src/pages/Login.jsx" type="email" placeholder="you@example.com" />
           </Form.Item>
